@@ -91,21 +91,38 @@ var exponent = function(base, exp) {
   return exp === 0 ? 1 : base * exponent(base, exp - 1);
 };
 
-console.log(exponent(8, 2))
+// console.log(exponent(8, 2))
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+  if (n <= 1) {
+    return n === 1;
+  }
+  return powerOfTwo(n/2);
 };
+
 
 // 9. Write a function that accepts a string a reverses it.
 var reverse = function(string) {
+  if (string === '') {
+    return string;
+  } 
+  return reverse(string.slice(1)) + string.charAt(0);
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+  string = string.trim().toLowerCase();
+  if (string.length <= 1) {
+    return true;
+  }
+  if (string.charAt(0) !== string.charAt(string.length-1)) {
+    return false;
+  }
+  return palindrome(string.slice(1, string.length-1));
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -114,17 +131,53 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+  if (x === 0 && y === 0) {
+    return NaN;
+  }
+  if (x < 0 && y < 0) {
+    return x > y ? x : modulo(x-y, y);
+  }
+  if (x < 0 && y > 0) {
+    return -x < y ? x : modulo(x+y, y);
+  }
+  if (x > 0 && y < 0) {
+    return modulo(x, -y);
+  }
+  return x < y ? x : modulo(x-y, y);
 };
+
 
 // 12. Write a function that multiplies two numbers without using the * operator  or
 // JavaScript's Math object.
 var multiply = function(x, y) {
+  if (y === 0) {
+    return 0;
+  }
+  if (y === 1 || y === -1) {
+    return x;
+  }
+  if (x < 0 && y < 0) {
+    return -x + multiply(-x, -y-1);
+  }
+  if (x < 0) {
+    return x + multiply(x, y-1);
+  }
+  if (y < 0) {
+    return -x + multiply(-x, -y-1)
+  }
+  return x + multiply(x, y-1);
 };
+
 
 // 13. Write a function that divides two numbers without using the / operator  or
 // JavaScript's Math object.
 var divide = function(x, y) {
+  if (x < y) {
+    return 0;
+  }
+  return 1 + divide(x-y, y);
 };
+console.log(divide(20, 5))
 
 // 14. Find the greatest common divisor (gcd) of two positive numbers.  The GCD of two
 // integers is the greatest integer that divides both x and y with no remainder.
@@ -207,6 +260,13 @@ var nthFibo = function(n) {
 // var words = ['i', 'am', 'learning', 'recursion'];
 // capitalizedWords(words); // ['I', 'AM', 'LEARNING', 'RECURSION']
 var capitalizeWords = function(input) {
+  if (!Array.isArray(input)) {
+    return input.toUpperCase()
+  }
+  return input.map((item) => {
+    return capitalizeWords(item);
+  })
+  
 };
 
 // 27. Given an array of strings, capitalize the first letter of each index.
